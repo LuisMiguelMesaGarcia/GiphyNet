@@ -21,13 +21,13 @@ namespace GifAPI.Repositories
                 .OrderByDescending(s => s.SearchDate)
                 .ToListAsync();
         }
-
-        public async Task<SearchHistory> AddAsync(SearchHistory searchHistory)
+public async Task<SearchHistory> AddAsync(SearchHistory searchHistory)
         {
             await _context.SearchHistories.AddAsync(searchHistory);
             await _context.SaveChangesAsync();
             return searchHistory;
         }
+        
 
     }
 }

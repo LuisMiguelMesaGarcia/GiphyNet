@@ -2,6 +2,6 @@
 {
     public interface IGiphyService
     {
-        Task<string> GetGifAsync(string query);
+        Task<string> GetGifAsync(string query,int offsetNumber);
     }
 }

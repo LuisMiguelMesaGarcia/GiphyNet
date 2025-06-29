@@ -17,7 +17,7 @@ namespace GifAPI.Models.Domain
 
         [Required]
         [MaxLength(500)]
-        public string GifUrl { get; set; }
+        public string? GifUrl { get; set; }
 
         public virtual ICollection<SearchQueryWord> QueryWords { get; set; } = new List<SearchQueryWord>();
 

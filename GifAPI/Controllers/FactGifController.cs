@@ -13,19 +13,19 @@ namespace GifAPI.Controllers
             _factGifService = factGifService;
         }
 
-        [HttpGet("factAndGif")]
-        public async Task<IActionResult> GetFactAndGif()
-        {
-            try
-            {
-                var result = await _factGifService.GetFactWithGifAsync();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error retrieving fact", error = ex.Message });
-            }
-        }
+        //[HttpGet("factAndGif")]
+        //public async Task<IActionResult> GetFactAndGif()
+        //{
+        //    try
+        //    {
+        //        var result = await _factGifService.GetFactWithGifAsync();
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { message = "Error retrieving fact", error = ex.Message });
+        //    }
+        //}
 
         [HttpGet("fact")]
         public async Task<IActionResult> GetFact()

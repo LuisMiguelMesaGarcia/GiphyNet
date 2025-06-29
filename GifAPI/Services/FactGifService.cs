@@ -2,6 +2,7 @@
 using GifAPI.Models.DTO;
 using GifAPI.Repositories.Interface;
 using GifAPI.Services.Interface;
+using System;
 
 namespace GifAPI.Services
 {
@@ -24,34 +25,43 @@ namespace GifAPI.Services
         public async Task<string> GetFactAsync()
         {
             var fact = await _catFactService.GetRandomFactAsync();
-            var queryWords = ExtractFirstThreeWords(fact.Fact);
-            return queryWords;
+            return fact.Fact;
         }
 
-        public async Task<FactGifResponseDto> GetFactWithGifAsync()
-        {
-            var fact = await _catFactService.GetRandomFactAsync();
-            var queryWords = ExtractFirstThreeWords(fact.Fact);
-            var gifUrl = await _giphyService.GetGifAsync(queryWords);
+        //public async Task<FactGifResponseDto> GetFactWithGifAsync()
+        //{
+        //    var fact = await _catFactService.GetRandomFactAsync();
+        //    var queryWords = ExtractFirstThreeWords(fact.Fact);
+        //    var gifUrl = await _giphyService.GetGifAsync(queryWords);
 
-            await SaveToHistory(fact.Fact, queryWords, gifUrl);
+        //    await SaveToHistory(fact.Fact, queryWords, gifUrl);
 
-            return new FactGifResponseDto
-            {
-                Fact = fact.Fact,
-                GifUrl = gifUrl,
-                QueryWords = queryWords
-            };
-        }
+        //    return new FactGifResponseDto
+        //    {
+        //        Fact = fact.Fact,
+        //        GifUrl = gifUrl,
+        //        QueryWords = queryWords
+        //    };
+        //}
 
         public async Task<string> GetNewGifForFactAsync(string? fact)
         {
+            var random = new Random();
+            int offsetNumber = random.Next(1, 51);
             var queryWords = ExtractFirstThreeWords(fact);
-            var gifUrl = await _giphyService.GetGifAsync(queryWords);
+            string? gifUrl = string.Empty;
+            try
+            {
+                gifUrl = await _giphyService.GetGifAsync(queryWords, offsetNumber);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Error getting GIF: {ex.Message}");
+            }
 
             await SaveToHistory(fact, queryWords, gifUrl);
 
-            return gifUrl;
+            return gifUrl ?? string.Empty;
         }
 
         public async Task<IEnumerable<SearchHistoryDto>> GetSearchHistoryAsync()
@@ -76,7 +86,7 @@ namespace GifAPI.Services
             return string.Join(' ', words.Take(3));
         }
 
-        private async Task SaveToHistory(string fact, string queryWords, string gifUrl)
+        private async Task SaveToHistory(string fact, string queryWords, string? gifUrl)
         {
             var searchHistory = new SearchHistory
             {

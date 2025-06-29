@@ -16,12 +16,12 @@ namespace GifAPI.Services
             _logger = logger;
         }
 
-        public async Task<string> GetGifAsync(string query)
+        public async Task<string> GetGifAsync(string query, int offsetNumber)
         {
             try
             {
                 var encodedQuery = Uri.EscapeDataString(query);
-                var url = $"https://api.giphy.com/v1/gifs/search?api_key={ApiKey}&q={encodedQuery}&limit=1";
+                var url = $"https://api.giphy.com/v1/gifs/search?api_key={ApiKey}&q={encodedQuery}&limit=1&offset={offsetNumber}";
 
                 var response = await _httpClient.GetStringAsync(url);
                 var options = new JsonSerializerOptions
