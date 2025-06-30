@@ -1,3 +1,4 @@
+using GifAPI.Configurations;
 using GifAPI.Data;
 using GifAPI.Repositories;
 using GifAPI.Repositories.Interface;
@@ -17,6 +18,10 @@ builder.Services.AddSwaggerGen();
 // Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//ApiKeys
+builder.Services.Configure<GiphyOptions>(
+    builder.Configuration.GetSection("Giphy"));
 
 // HTTP Client
 builder.Services.AddHttpClient();

@@ -1,5 +1,7 @@
-﻿using GifAPI.Models.DTO;
+﻿using GifAPI.Configurations;
+using GifAPI.Models.DTO;
 using GifAPI.Services.Interface;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace GifAPI.Services
@@ -8,12 +10,13 @@ namespace GifAPI.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<GiphyService> _logger;
-        private const string ApiKey = "voaNIOg1u7ONPbckzWK71C48YqCOkhVP";
+        private readonly string _apiKey;
 
-        public GiphyService(HttpClient httpClient, ILogger<GiphyService> logger)
+        public GiphyService(HttpClient httpClient, ILogger<GiphyService> logger, IOptions<GiphyOptions> options)
         {
             _httpClient = httpClient;
             _logger = logger;
+            _apiKey = options.Value.ApiKey;
         }
 
         public async Task<string> GetGifAsync(string query, int offsetNumber)
@@ -21,7 +24,7 @@ namespace GifAPI.Services
             try
             {
                 var encodedQuery = Uri.EscapeDataString(query);
-                var url = $"https://api.giphy.com/v1/gifs/search?api_key={ApiKey}&q={encodedQuery}&limit=1&offset={offsetNumber}";
+                var url = $"https://api.giphy.com/v1/gifs/search?api_key={_apiKey}&q={encodedQuery}&limit=1&offset={offsetNumber}";
 
                 var response = await _httpClient.GetStringAsync(url);
                 var options = new JsonSerializerOptions
